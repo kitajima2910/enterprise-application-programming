@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Lab1WebApp.Models.Course>
+@{ 
+    ViewData["Title"] = "Index";
+}
+
+<h2>Course List</h2>
+<br />
+<h4>
+    @Html.ActionLink("Create new", "Create", "Courses")
+</h4>
+<br />
+<table class="table">
+    <tr>
+        <th>Course Id</th>
+        <th>Description</th>
+        <th>Duration</th>
+        <th>Course Fee</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <th>@item.CourseId</th>
+            <th>@item.Description</th>
+            <th>@item.Duration</th>
+            <th>@item.Fee</th>
+        </tr>
+    }
+</table>

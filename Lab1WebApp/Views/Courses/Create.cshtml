@@ -1,0 +1,28 @@
+﻿@model Lab1WebApp.Models.Course
+@{ 
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create new Course</h2>
+@using (Html.BeginForm())
+{
+    <div>
+        @Html.LabelFor(model => model.CourseId)
+        @Html.EditorFor(model => model.CourseId)
+    </div> 
+    <div>
+        @Html.LabelFor(model => model.Description)
+        @Html.EditorFor(model => model.Description)
+    </div> 
+    <div>
+        @Html.LabelFor(model => model.Duration)
+        @Html.EditorFor(model => model.Duration)
+    </div> 
+    <div>
+        @Html.LabelFor(model => model.Fee)
+        @Html.EditorFor(model => model.Fee)
+    </div> 
+    <div>
+        <input type="submit"  value="Submit" />
+    </div>
+}
