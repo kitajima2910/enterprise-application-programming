@@ -1,28 +1,53 @@
 ﻿@model IEnumerable<Lab1WebApp.Models.Course>
-@{ 
+
+@{
     ViewData["Title"] = "Index";
 }
 
-<h2>Course List</h2>
-<br />
-<h4>
-    @Html.ActionLink("Create new", "Create", "Courses")
-</h4>
-<br />
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
 <table class="table">
-    <tr>
-        <th>Course Id</th>
-        <th>Description</th>
-        <th>Duration</th>
-        <th>Course Fee</th>
-    </tr>
-    @foreach (var item in Model)
-    {
+    <thead>
         <tr>
-            <th>@item.CourseId</th>
-            <th>@item.Description</th>
-            <th>@item.Duration</th>
-            <th>@item.Fee</th>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Duration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fee)
+            </th>
+            <th></th>
         </tr>
-    }
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CourseId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Duration)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fee)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.CourseId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.CourseId }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.CourseId })
+            </td>
+        </tr>
+}
+    </tbody>
 </table>
