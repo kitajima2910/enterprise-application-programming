@@ -1,0 +1,29 @@
+﻿@model Lab2WebApp.Models.Account
+@{
+    ViewData["Title"] = "Balance";
+}
+
+<h1>Balance</h1>
+
+<label>AccountCode: @ViewBag.AccountCode</label>
+
+<form asp-controller="Accounts" asp-action="Balance" method="post">
+    <div class="form-group col-sm-12">
+        <input type="hidden" name="accountCode" value="@ViewBag.AccountCode" class="form-control col-sm-6" />
+    </div>
+    <div class="form-group col-sm-12">
+        <label></label>
+        <input type="text" name="balance" class="form-control col-sm-6" />
+    </div>
+    <div class="form-group col-sm-12">
+        <button type="submit" name="key" value="Withdrawal" class="btn btn-outline-primary">Withdrawal</button>
+        <button type="submit" name="key" value="Recharge" class="btn btn-outline-primary">Recharge</button>
+    </div>
+</form>
+
+<br />
+&nbsp;&nbsp;&nbsp;<label class="text-danger">@ViewBag.Msg</label>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

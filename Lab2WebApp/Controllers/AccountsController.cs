@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Lab2WebApp.Controllers
 {
@@ -60,7 +61,9 @@ namespace Lab2WebApp.Controllers
             var model = JsonConvert.DeserializeObject<Account>(httpClient.GetStringAsync($"{uri}{accCode}/{pinCode}").Result);
             if(model != null)
             {
-                return RedirectToAction("Index", "Accounts");
+                HttpContext.Session.SetString("InfoAccount", JsonConvert.SerializeObject(model));
+
+                return RedirectToAction("Balance", "Accounts");
             }
 
             ViewBag.Msg = "Error!!";
@@ -124,5 +127,47 @@ namespace Lab2WebApp.Controllers
 
             return View();
         }
+
+
+        public IActionResult Balance()
+        {
+            ViewBag.AccountCode = JsonConvert.DeserializeObject<Account>(HttpContext.Session.GetString("InfoAccount")).AccountCode;
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Balance(string accountCode, string key, double balance)
+        {
+            try
+            {
+                var account = JsonConvert.DeserializeObject<Account>(httpClient.GetStringAsync(uri + accountCode).Result);
+
+                if (key.Equals("Withdrawal"))
+                {
+                    account.Balance -= balance;
+                }
+                else if (key.Equals("Recharge"))
+                {
+                    account.Balance += balance;
+                }
+
+                var model = httpClient.PutAsJsonAsync(uri + account.AccountCode, account).Result;
+                if (model.IsSuccessStatusCode)
+                {
+                    ViewBag.AccountCode = accountCode;
+                    ViewBag.Msg = "Successfuly!...";
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = ex.Message;
+            }
+            
+
+            return View();
+        }
+
     }
 }

@@ -88,5 +88,6 @@ namespace Lab2WebAPI.Services
                 return await connect.QueryAsync<Account>(sql, connect);
             }
         }
+
     }
 }
