@@ -1,0 +1,66 @@
+﻿@model IEnumerable<HBNYAPP.Models.News>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<form asp-controller="News" asp-action="Index" method="get">
+    <div class="form-group d-flex">
+        <input type="text" name="keyword" class="form-control" placeholder="Search..." /> &nbsp;
+        <input type="submit" class="btn btn-outline-success" value="Search" />
+    </div>  
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NewsId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NewsTitle)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShortContent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NewsContent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PostedDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NewsId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NewsTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShortContent)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NewsContent)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PostedDate)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.NewsId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.NewsId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.NewsId })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
