@@ -46,5 +46,17 @@ namespace Lab5WebAPI.Controllers
         {
             return Ok(await services.Create(employee));
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateAsyn([FromBody] Employee employee)
+        {
+            return Ok(await services.Update(employee));
+        }
+
+        [HttpDelete("{code}")]
+        public async Task<IActionResult> DeleteAsyn([FromRoute] string code)
+        {
+            return Ok(await services.Delete(code));
+        }
     }
 }

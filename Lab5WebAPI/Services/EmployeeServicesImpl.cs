@@ -29,6 +29,14 @@ namespace Lab5WebAPI.Services
             return created > 0;
         }
 
+        public async Task<bool> Delete(string code)
+        {
+            var model = await context.GetEmployees.FindAsync(code);
+            context.GetEmployees.Remove(model);
+            var deleted = await context.SaveChangesAsync();
+            return deleted > 0;
+        }
+
         public async Task<Employee> GetEmployee(string code)
         {
             return await context.GetEmployees.SingleOrDefaultAsync(m => m.Code.Equals(code));
@@ -37,6 +45,13 @@ namespace Lab5WebAPI.Services
         public async Task<IEnumerable<Employee>> GetEmployees()
         {
             return await context.GetEmployees.ToListAsync();
+        }
+
+        public async Task<bool> Update(Employee employee)
+        {
+            context.GetEmployees.Update(employee);
+            var updated = await context.SaveChangesAsync();
+            return updated > 0;
         }
     }
 }
