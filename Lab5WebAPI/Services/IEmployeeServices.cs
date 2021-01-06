@@ -12,5 +12,7 @@ namespace Lab5WebAPI.Services
         Task<Employee> GetEmployee(string code);
         Task<Employee> CheckLogin(string code, string pass);
         Task<bool> Create(Employee employee);
+        Task<bool> Update(Employee employee);
+        Task<bool> Delete(string code);
     }
 }

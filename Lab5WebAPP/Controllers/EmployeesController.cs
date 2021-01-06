@@ -20,6 +20,45 @@ namespace Lab5WebAPP.Controllers
             return View(models);
         }
 
+        public IActionResult Edit(string code)
+        {
+            var model = JsonConvert.DeserializeObject<Employee>(httpClient.GetStringAsync($"{uri}{code}").Result);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Employee employee)
+        {
+            try
+            {
+                var model = httpClient.PutAsJsonAsync(uri, employee).Result;
+                if (model.IsSuccessStatusCode && ModelState.IsValid)
+                {
+                    return RedirectToAction("Index");
+                }
+
+                ViewBag.Msg = "Error!";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Msg = ex.Message;
+            }
+            return View();
+        }
+
+
+        public IActionResult Delete(string code)
+        {
+            var model = httpClient.DeleteAsync($"{uri}{code}").Result;
+            if (model.IsSuccessStatusCode && ModelState.IsValid)
+            {
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
+        }
+
+
         public IActionResult Create()
         {
             return View();
