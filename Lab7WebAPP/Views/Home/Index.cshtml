@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Lab7WebAPP.Models.StoreStaff>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<form asp-controller="Home" asp-action="Index" method="get" class="d-flex">
+    <select name="keyword" asp-items="(IEnumerable<SelectListItem>)ViewBag.Stores" class="form-control col-sm-4">
+        <option value="">--- Please selet ---</option>
+    </select> &nbsp;
+    <select name="keyname" asp-items="(IEnumerable<SelectListItem>)ViewBag.Staffs" class="form-control col-sm-4">
+        <option value="">--- Please selet ---</option>
+    </select> &nbsp;
+    <button type="submit" class="btn btn-outline-primary">Search</button>
+</form>
+
+<table class="table">
+    <tr>
+        <th>Staff Code</th>
+        <th>Staff Name</th>
+        <th>Join Date</th>
+        <th>Store Name</th>
+        <th>Store Address</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Staff.Code</td>
+            <td>@item.Staff.Name</td>
+            <td>@item.Staff.JoinDate</td>
+            <td>@item.Store.Name</td>
+            <td>@item.Store.Address</td>
+        </tr>
+    }
+</table>
