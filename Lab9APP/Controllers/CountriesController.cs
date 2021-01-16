@@ -37,22 +37,34 @@ namespace Lab9APP.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    if (file.Length > 0)
+                    if (file == null)
                     {
-                        var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
-                        var rename = Convert.ToString(Guid.NewGuid()) + "." + fileName.Split('.').Last();
-                        var path = Path.Combine("wwwroot/Images", rename);
-                        var stream = new FileStream(path, FileMode.Create);
-                        file.CopyToAsync(stream);
-
-                        country.Photo = "Images/" + rename;
-
                         var model = httpClient.PostAsJsonAsync(uri, country).Result;
-                        if(model.IsSuccessStatusCode)
+                        if (model.IsSuccessStatusCode)
                         {
                             return RedirectToAction("Index");
                         }
                     }
+                    else
+                    {
+                        if (file.Length > 0)
+                        {
+                            var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                            var rename = Convert.ToString(Guid.NewGuid()) + "." + fileName.Split('.').Last();
+                            var path = Path.Combine("wwwroot/Images", rename);
+                            var stream = new FileStream(path, FileMode.Create);
+                            file.CopyToAsync(stream);
+
+                            country.Photo = "Images/" + rename;
+
+                            var model = httpClient.PostAsJsonAsync(uri, country).Result;
+                            if (model.IsSuccessStatusCode)
+                            {
+                                return RedirectToAction("Index");
+                            }
+                        }
+                    }
+                    
                 }
 
                 ViewBag.Msg = "Fail!";
@@ -62,6 +74,27 @@ namespace Lab9APP.Controllers
                 ViewBag.Msg = "Erro!";
             }
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var model = httpClient.DeleteAsync($"{uri}/{id}").Result;
+            if (model.IsSuccessStatusCode)
+            {
+                var modelOld = JsonConvert.DeserializeObject<Country>(httpClient.GetStringAsync($"{uri}/{id}").Result);
+                var pathImageOld = modelOld?.Photo; // ?? Fix null
+                if (!string.IsNullOrEmpty(pathImageOld))
+                {
+                    var pathOld = Path.Combine("wwwroot", pathImageOld);
+                    if (System.IO.File.Exists(pathOld))
+                    {
+                        System.IO.File.Delete(pathOld);
+                    }
+                }
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -78,7 +111,7 @@ namespace Lab9APP.Controllers
             try
             {
                 var modelOld = JsonConvert.DeserializeObject<Country>(httpClient.GetStringAsync($"{uri}/{country.Id}").Result);
-                var pathImageOld = modelOld.Photo;
+                var pathImageOld = modelOld?.Photo; // ?? Fix null
 
                 if (ModelState.IsValid)
                 {
@@ -106,8 +139,14 @@ namespace Lab9APP.Controllers
                             var model = httpClient.PutAsJsonAsync(uri, country).Result;
                             if (model.IsSuccessStatusCode)
                             {
-                                var pathOld = Path.Combine("wwwroot", pathImageOld);
-                                System.IO.File.Delete(pathOld);
+                                if (!string.IsNullOrEmpty(pathImageOld))
+                                {
+                                    var pathOld = Path.Combine("wwwroot", pathImageOld);
+                                    if (System.IO.File.Exists(pathOld))
+                                    {
+                                        System.IO.File.Delete(pathOld);
+                                    }
+                                }
                                 return RedirectToAction("Index");
                             }
                         }
@@ -115,12 +154,11 @@ namespace Lab9APP.Controllers
 
                 }
 
-                ViewBag.Msg = "Erro!";
+                ViewBag.Msg = "Fail!";
             }
             catch (Exception)
             {
-
-                throw;
+                ViewBag.Msg = "Erro!";
             }
             return View();
         }

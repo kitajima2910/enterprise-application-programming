@@ -27,7 +27,7 @@ namespace Lab9API.Controllers
         [HttpPut]
         public IActionResult Update(Country country) => Ok(services.Update(country));
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id) => Ok(services.Delete(id));
     }
 }
