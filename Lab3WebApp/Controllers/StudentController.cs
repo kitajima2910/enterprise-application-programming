@@ -63,7 +63,7 @@ namespace Lab3WebApp.Controllers
         {
             try
             {
-                var model = httpClient.PutAsXmlAsync(uri + student.StudentId, student).Result;
+                var model = httpClient.PutAsJsonAsync(uri + student.StudentId, student).Result;
                 if (model.IsSuccessStatusCode)
                 {
                     return RedirectToAction("Index", "Student");
