@@ -1,0 +1,54 @@
+﻿@model IEnumerable<WCFAPP.Models.Movie>
+
+@{
+    ViewData["Title"] = "Search";
+}
+
+<h1>Search Movie</h1>
+<br />
+
+<form asp-controller="Movies" asp-action="Search">
+    <label>Enter a drector to search:</label>
+    <div class="form-group col-sm-12 d-flex">
+        <input type="text" name="keyword" class="form-control col-sm-6" />
+        <button type="submit" class="btn btn-outline-primary">Filter</button>
+    </div>
+</form>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Director)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.YearOfRelease)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Director)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.YearOfRelease)
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
